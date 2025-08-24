@@ -4,6 +4,7 @@
 
 - 生成二维码 PNG：`node-utils qrcode`
 - 将 `.mov` 转为 `.mp4`：`node-utils convert`
+- 拼接九宫格图片：`node-utils grid9`
 
 ### 目录结构
 
@@ -13,7 +14,8 @@ nodejs_utils/
   │  ├─ index.ts                 # CLI 入口：注册命令与初始化
   │  ├─ commands/
   │  │  ├─ qrcode.ts             # qrcode 子命令
-  │  │  └─ convert.ts            # convert 子命令
+  │  │  ├─ convert.ts            # convert 子命令
+  │  │  └─ grid9.ts              # grid9 子命令（九宫格拼图，使用 Jimp 合成）
   │  └─ utils/
   │     ├─ ffmpeg.ts             # ffmpeg 静态二进制配置与导出
   │     └─ fs.ts                 # 文件系统公共方法
@@ -89,6 +91,28 @@ node-utils convert -i ./input.mov -o ./output.mp4 -p medium
 - `-s, --size`：二维码尺寸（像素），默认 512
 - `-i, --input`：输入 `.mov` 文件
 - `-p, --preset`：x264 预设（`ultrafast`…`veryslow`），默认 `medium`
+
+- 九宫格拼图：
+
+```bash
+# 从目录随机取 9 张，生成 ./grid9.jpg（或使用 -o 指定）
+node-utils grid9 -d ./images
+node-utils grid9 -d ./images -o ./out/grid9.jpg -s 512
+
+# 批量模式：对目录内所有图片打乱后，每 9 张一组生成多张
+# 导出 floor(n/9) 张，默认命名 grid9-1.jpg / grid9-2.jpg ...
+node-utils grid9 -d ./images --multi
+
+# 批量模式 + 指定输出名：会在指定名的扩展名前插入 -序号
+node-utils grid9 -d ./images --multi -o ./out/grid9.jpg
+```
+
+参数（grid9）：
+- `-d, --dir`：输入图片目录（至少 9 张）。
+- `-o, --output`：输出文件路径（单张模式默认 `<dir>/grid9.jpg`；多张模式默认 `grid9-1.jpg ~ grid9-x.jpg`，若指定文件名则在其扩展名前插入 `-1`、`-2` 等）。
+- `-s, --size`：单格边长（像素），默认 512，最终成品为 `3x3`，尺寸 `size*3`。
+- `-m, --multi`：批量输出，多于 9 张时生成 `floor(n/9)` 张九宫格。
+- 兼容格式：`.jpg/.jpeg/.png/.webp/.bmp`，背景为白色，按中心裁剪覆盖（cover）。
 
 ### 部署
 
