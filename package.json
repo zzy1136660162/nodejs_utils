@@ -1,0 +1,27 @@
+{
+  "name": "nodejs_utils",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "bin": {
+    "node-utils": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "commander": "^14.0.0",
+    "ffmpeg-static": "^5.2.0",
+    "fluent-ffmpeg": "^2.1.3",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "@types/fluent-ffmpeg": "^2.1.27",
+    "@types/node": "^24.3.0",
+    "@types/qrcode": "^1.5.5",
+    "typescript": "^5.5.3"
+  },
+  "private": true
+}
