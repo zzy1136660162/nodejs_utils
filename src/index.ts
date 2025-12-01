@@ -2,8 +2,10 @@
 import { Command } from 'commander'
 import { configureFfmpegBinary } from './utils/ffmpeg'
 import { attachGrid9Command } from './commands/grid9'
+import { attachWordImagesCommand } from './commands/word-images'
 import { attachQRCodeCommand } from './commands/qrcode'
 import { attachConvertCommand } from './commands/convert'
+import { attachCompressCommand } from './commands/compress'
 
 configureFfmpegBinary()
 
@@ -16,6 +18,8 @@ program
 
 attachQRCodeCommand(program)
 attachConvertCommand(program)
+attachCompressCommand(program)
 attachGrid9Command(program)
+attachWordImagesCommand(program)
 
 program.parseAsync(process.argv)

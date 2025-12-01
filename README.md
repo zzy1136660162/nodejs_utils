@@ -4,7 +4,9 @@
 
 - 生成二维码 PNG：`node-utils qrcode`
 - 将 `.mov` 转为 `.mp4`：`node-utils convert`
+- 压缩图片：`node-utils compress`
 - 拼接九宫格图片：`node-utils grid9`
+- 从 Word 导出图片：`node-utils word-images`
 
 ### 目录结构
 
@@ -15,7 +17,9 @@ nodejs_utils/
   │  ├─ commands/
   │  │  ├─ qrcode.ts             # qrcode 子命令
   │  │  ├─ convert.ts            # convert 子命令
-  │  │  └─ grid9.ts              # grid9 子命令（九宫格拼图，使用 Jimp 合成）
+  │  │  ├─ compress.ts           # compress 子命令（图片压缩，使用 Sharp）
+  │  │  ├─ grid9.ts              # grid9 子命令（九宫格拼图，使用 Jimp 合成）
+  │  │  └─ word-images.ts        # word-images 子命令（从 Word 导出图片）
   │  └─ utils/
   │     ├─ ffmpeg.ts             # ffmpeg 静态二进制配置与导出
   │     └─ fs.ts                 # 文件系统公共方法
@@ -85,6 +89,22 @@ node-utils qrcode -t "https://example.com" -o ./tmp/qrcode.png -s 512
 node-utils convert -i ./input.mov -o ./output.mp4 -p medium
 ```
 
+- 压缩图片（单文件或批量）：
+
+```bash
+# 压缩单个图片，质量 80%
+node-utils compress -i ./photo.jpg -q 80
+
+# 压缩并调整尺寸
+node-utils compress -i ./photo.jpg -o ./small.jpg -q 70 -w 1920
+
+# 批量压缩目录内所有图片
+node-utils compress -i ./images -o ./compressed -q 75
+
+# 转换格式为 WebP
+node-utils compress -i ./photo.jpg -f webp -q 85
+```
+
 参数：
 - `-t, --text`：二维码内容（文本或 URL）
 - `-o, --output`：输出文件路径
@@ -106,6 +126,15 @@ node-utils grid9 -d ./images --multi
 # 批量模式 + 指定输出名：会在指定名的扩展名前插入 -序号
 node-utils grid9 -d ./images --multi -o ./out/grid9.jpg
 ```
+
+参数（compress）：
+- `-i, --input`：输入文件或文件夹路径。
+- `-o, --output`：输出文件或文件夹路径，默认添加 `-compressed` 后缀。
+- `-q, --quality`：压缩质量（1-100），默认 80。
+- `-w, --width`：调整宽度（像素），保持宽高比。
+- `-h, --height`：调整高度（像素），保持宽高比。
+- `-f, --format`：输出格式（jpg/png/webp/avif），默认保持原格式。
+- 支持格式：`.jpg/.jpeg/.png/.webp/.tiff/.avif`。
 
 参数（grid9）：
 - `-d, --dir`：输入图片目录（至少 9 张）。
